@@ -1,0 +1,7 @@
+.bookStyle{
+    border: 1px solid blue;
+    border-radius: 5px;
+    margin: 10px auto;
+    width: 400px;
+    padding: 10px;
+}
