@@ -11,7 +11,8 @@ class App extends Component{
       {id: 1, bookName: "Math", writter: "Pranav Sarkar"},
       {id: 2, bookName: "Computer", writter: "Dr. Subir Das"},
       {id: 3, bookName: "DSA", writter: "Dr. AK Ghos"}
-    ]
+    ],
+    showBooks: true
   }
 
 //define as a method  not function
@@ -48,6 +49,16 @@ deleteBookState = index => {
 }
 //deleteBookState function end
 
+//toggleBooks function start
+toggleBooks = () => {
+  this.setState({
+    //conditional
+    showBooks: !this.state.showBooks
+  });
+
+}
+//toggleBooks function end
+
 
   render(){
     // let obj = new Component();//inheritance to Component
@@ -62,15 +73,19 @@ deleteBookState = index => {
     }
 
     // Component list start
-    const books = this.state.books.map((book, index) =>{
-      return(
-       <Book bookName={book.bookName}
-       writter={book.writter}
-       delete={() => this.deleteBookState(index)}
-       key={book.id}
-       inputName={(e) => this.changeInputState(e, index)}/>
-      )
-    })
+    //Conditional rendering
+    let books = null;
+    if(this.state.showBooks){
+      books = this.state.books.map((book, index) =>{
+        return(
+         <Book bookName={book.bookName}
+         writter={book.writter}
+         delete={() => this.deleteBookState(index)}
+         key={book.id}
+         inputName={(e) => this.changeInputState(e, index)}/>
+        )
+      })
+    }
     // Component list end
 
     return(
@@ -78,17 +93,11 @@ deleteBookState = index => {
         <p>Learn React with  project</p>
         <h1 style={style}>BookList:</h1>
 
-        {/* <button onClick={this.changeBookState.bind(this, "Nineteen")}>Change State</button> */}
-
-        {/* <input type="text" onChange={this.changeInputState}/> */}
-
-        {/* <Book bookName={this.state.books[0].bookName} writter={this.state.books[0].writter}/>
-        <Book bookName={this.state.books[1].bookName} writter={this.state.books[1].writter}/>
-        <Book bookName={this.state.books[2].bookName} writter={this.state.books[2].writter}
-        change={() => this.changeBookState("Nine")} //pass method ref
-        inputName={this.changeInputState}/> */}
+        <button onClick={this.toggleBooks}>Toggle Books</button>
 
         {books}
+        {/* conditional rendering */}
+        {/* {this.state.showBooks ? books : null} */}
      
       </div>
     )
