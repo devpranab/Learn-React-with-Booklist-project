@@ -8,36 +8,45 @@ class App extends Component{
   //State
   state = {
     books: [
-      {bookName: "Math", writter: "Pranav Sarkar"},
-      {bookName: "Computer", writter: "Dr. Subir Das"},
-      {bookName: "DSA", writter: "Dr. AK Ghos"}
+      {id: 1, bookName: "Math", writter: "Pranav Sarkar"},
+      {id: 2, bookName: "Computer", writter: "Dr. Subir Das"},
+      {id: 3, bookName: "DSA", writter: "Dr. AK Ghos"}
     ]
   }
 
 //define as a method  not function
-//changeBookState function start
-changeBookState = newBookAdd => {
-  this.setState({
-    books: [
-      {bookName: newBookAdd, writter: "Pranav Sarkar"},
-      {bookName: "Computer", writter: "Dr. Subir Das"},
-      {bookName: "DSA", writter: "Dr. AK Ghos"}
-    ]
-  })
-}
-//changeBookState function start
-
 //changeInputState function start
-changeInputState = e => {
-  this.setState({
-    books: [
-      {bookName: e.target.value, writter: "Pranav Sarkar"},
-      {bookName: "Computer", writter: "Dr. Subir Das"},
-      {bookName: "DSA", writter: "Dr. AK Ghos"}
-    ]
-  });
+changeInputState = (e, index) => {
+  //filter index
+ const book = {
+   ...this.state.books[index]
+ }
+ //change
+ book.bookName = e.target.value;
+ //update
+ const books = [...this.state.books];//cpoy
+ books[index]  = book;
+ this.setState({books:books})
 }
 //changeInputState function end
+
+//deleteBookState function start
+deleteBookState = index => {
+  //bring
+  //const books = this.state.books.slice();
+  //or
+  //const books = this.state.books.map(item => item);
+  //or
+  const books = [...this.state.books];
+  //hold
+  books.splice(index, 1)
+  //do uppdate
+  this.setState({
+    books: books
+  })
+
+}
+//deleteBookState function end
 
 
   render(){
@@ -52,20 +61,34 @@ changeInputState = e => {
       backgroundColor: "black"
     }
 
+    // Component list start
+    const books = this.state.books.map((book, index) =>{
+      return(
+       <Book bookName={book.bookName}
+       writter={book.writter}
+       delete={() => this.deleteBookState(index)}
+       key={book.id}
+       inputName={(e) => this.changeInputState(e, index)}/>
+      )
+    })
+    // Component list end
+
     return(
       <div className='App'>
         <p>Learn React with  project</p>
         <h1 style={style}>BookList:</h1>
 
-        <button onClick={this.changeBookState.bind(this, "Nineteen")}>Change State</button>
+        {/* <button onClick={this.changeBookState.bind(this, "Nineteen")}>Change State</button> */}
 
-        <input type="text" onChange={this.changeInputState}/>
+        {/* <input type="text" onChange={this.changeInputState}/> */}
 
-        <Book bookName={this.state.books[0].bookName} writter={this.state.books[0].writter}/>
+        {/* <Book bookName={this.state.books[0].bookName} writter={this.state.books[0].writter}/>
         <Book bookName={this.state.books[1].bookName} writter={this.state.books[1].writter}/>
         <Book bookName={this.state.books[2].bookName} writter={this.state.books[2].writter}
         change={() => this.changeBookState("Nine")} //pass method ref
-        inputName={this.changeInputState}/>
+        inputName={this.changeInputState}/> */}
+
+        {books}
      
       </div>
     )
