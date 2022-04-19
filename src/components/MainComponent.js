@@ -1,14 +1,16 @@
 import React,{Component} from 'react';
-//import Person from './components/Person';
-// import BookList from './lists/BookList.js';
 import BookList from './lists/BookList.js';
 import bookList from '../assets/BookState.js';
 
 //Class component
 class MainComponent extends Component{
-  //State
-  state = { books: bookList,
-            showBooks: true
+  constructor(props){
+    super(props);
+    //State
+    this.state = { books: bookList,
+      showBooks: true
+   }
+   console.log("MainComponent Constructor");
   }
 
 //define as a method  not function
@@ -30,10 +32,6 @@ changeInputState = (e, index) => {
 //deleteBookState function start
 deleteBookState = index => {
   //bring
-  //const books = this.state.books.slice();
-  //or
-  //const books = this.state.books.map(item => item);
-  //or
   const books = [...this.state.books];
   //hold
   books.splice(index, 1)
@@ -55,8 +53,39 @@ toggleBooks = () => {
 }
 //toggleBooks function end
 
+// UNSAFE_componentWillMount(){
+//   console.log("MainComponent componentWillMount");
+// }
+componentDidMount(){
+  console.log("MainComponent componentDidMount");
+}
+
+//Component Update LifeCycle (by state) start
+shouldComponentUpdate(nextProps, nextState){
+  console.log("U MainComponent shouldComponentUpdate", nextState, nextProps);
+  return true;
+}
+// UNSAFE_componentWillUpdate(nextProps, nextState){
+//   console.log("U MainComponent componentWillUpdate");
+// }
+componentDidUpdate(){
+  console.log("U MainComponent componentDidUpdate");
+}
+//Component Update LifeCycle (by state) end
+
+// exchange of UNSAFE- updated method start - after 16.3
+static getDerivedStateFromProps(nextProps, prevState){
+  console.log("MainComponent getDerivedStateFromProps", nextProps, prevState);
+  return prevState;
+}
+// exchange of UNSAFE- updated method end
+
+getSnapshotBeforeUpdate(){
+  console.log("U MainComponent getSnapshotBeforeUpdate");
+}
 
   render(){
+    console.log("MainComponent render");
 
     //inline css
     const style = {
@@ -73,15 +102,6 @@ toggleBooks = () => {
       books = <BookList books={this.state.books}
       deleteBookState={this.deleteBookState}
       changeInputState={this.changeInputState}/>
-      // books = this.state.books.map((book, index) =>{
-      //   return(
-      //    <Book bookName={book.bookName}
-      //    writter={book.writter}
-      //    delete={() => this.deleteBookState(index)}
-      //    key={book.id}
-      //    inputName={(e) => this.changeInputState(e, index)}/>
-      //   )
-      // })
     }
     // Component list end
 
@@ -93,9 +113,6 @@ toggleBooks = () => {
         <button onClick={this.toggleBooks}>Toggle Books</button>
 
         {books}
-        {/* conditional rendering */}
-        {/* {this.state.showBooks ? books : null} */}
-     
       </div>
     )
   }
