@@ -36,7 +36,7 @@ selectedBookHandler = bookId => { //receive
 
     return(
       <div className='App'>
-         <span>Learn React with  project</span>
+         <span>Learn React with  project</span >
          <nav className='nav-bar'>
           <ul>
             <li><NavLink to='/' activeclassname="active">Home</NavLink></li>
