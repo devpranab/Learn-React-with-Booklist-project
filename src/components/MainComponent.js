@@ -1,118 +1,55 @@
 import React,{Component} from 'react';
 import BookList from './lists/BookList.js';
 import bookList from '../assets/BookState.js';
+import NewBook from './representational/NewBook.js';
+import {Route, Routes, NavLink, Navigate, Redirect} from 'react-router-dom';
+import BookDetails from './representational/BookDetails.js';
+import Page404 from './representational/Page404.js';
 
 //Class component
 class MainComponent extends Component{
   constructor(props){
     super(props);
     //State
-    this.state = { books: bookList,
-      showBooks: true
+    this.state = { 
+      books: bookList,
+      selectedBook: null
    }
-   console.log("MainComponent Constructor");
-  }
-
-//define as a method  not function
-//changeInputState function start
-changeInputState = (e, index) => {
-  //filter index
- const book = {
-   ...this.state.books[index]
- }
- //change
- book.bookName = e.target.value;
- //update
- const books = [...this.state.books];//cpoy
- books[index]  = book;
- this.setState({books:books})
 }
-//changeInputState function end
 
-//deleteBookState function start
-deleteBookState = index => {
-  //bring
-  const books = [...this.state.books];
-  //hold
-  books.splice(index, 1)
-  //do uppdate
+//selectedBookHandler function
+selectedBookHandler = bookId => { //receive
+  const book = this.state.books.filter(book =>
+    book.id === bookId)[0];
   this.setState({
-    books: books
+    selectedBook: book //set after receive
   })
 
 }
-//deleteBookState function end
-
-//toggleBooks function start
-toggleBooks = () => {
-  this.setState({
-    //conditional
-    showBooks: !this.state.showBooks
-  });
-
-}
-//toggleBooks function end
-
-// UNSAFE_componentWillMount(){
-//   console.log("MainComponent componentWillMount");
-// }
-componentDidMount(){
-  console.log("MainComponent componentDidMount");
-}
-
-//Component Update LifeCycle (by state) start
-shouldComponentUpdate(nextProps, nextState){
-  console.log("U MainComponent shouldComponentUpdate", nextState, nextProps);
-  return true;
-}
-// UNSAFE_componentWillUpdate(nextProps, nextState){
-//   console.log("U MainComponent componentWillUpdate");
-// }
-componentDidUpdate(){
-  console.log("U MainComponent componentDidUpdate");
-}
-//Component Update LifeCycle (by state) end
-
-// exchange of UNSAFE- updated method start - after 16.3
-static getDerivedStateFromProps(nextProps, prevState){
-  console.log("MainComponent getDerivedStateFromProps", nextProps, prevState);
-  return prevState;
-}
-// exchange of UNSAFE- updated method end
-
-getSnapshotBeforeUpdate(){
-  console.log("U MainComponent getSnapshotBeforeUpdate");
-}
 
   render(){
-    console.log("MainComponent render");
-
-    //inline css
-    const style = {
-      border: "1px solid red",
-      borderRadius: "5px",
-      color: "white",
-      backgroundColor: "black"
-    }
-
     // Component list start
-    //Conditional rendering
-    let books = null;
-    if(this.state.showBooks){
-      books = <BookList books={this.state.books}
-      deleteBookState={this.deleteBookState}
-      changeInputState={this.changeInputState}/>
-    }
+     const books = <BookList 
+     books={this.state.books}
+     selectedBookHandler={this.selectedBookHandler}/>
     // Component list end
 
     return(
       <div className='App'>
-        <span>Learn React with  project</span>
-        <h1 style={style}>BookList:</h1>
+         <span>Learn React with  project</span>
+         <nav className='nav-bar'>
+          <ul>
+            <li><NavLink to='/' activeclassname="active">Home</NavLink></li>
+            <li><NavLink to='/new-book' activeclassname="active">New Book</NavLink></li>
+          </ul>
+        </nav> 
+    
+        <Routes>
+        <Route path="/" element={books}/>
+        <Route path="/new-book" element={<NewBook />}/>
+        <Route path="/:id" element={<BookDetails book={this.state.selectedBook}/>}/>
+        </Routes>
 
-        <button onClick={this.toggleBooks}>Toggle Books</button>
-
-        {books}
       </div>
     )
   }

@@ -5,3 +5,7 @@
     width: 400px;
     padding: 10px;
 }
+.bookStyle:hover {
+    color: orange;
+    cursor: pointer;
+}
